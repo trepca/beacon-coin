@@ -1,0 +1,10 @@
+venv
+.chia
+*_cache*
+.vscode
+__pycache__
+dist
+*.egg-info
+main.sym
+.DS_Store
+.python-version

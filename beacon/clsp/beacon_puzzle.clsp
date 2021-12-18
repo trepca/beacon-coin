@@ -1,0 +1,82 @@
+( 
+ mod (
+    MOD_HASH        ;; curried in
+    DATA   ;; curried in
+    VERSION
+    PUB_KEY
+    truths
+    new_version
+    commit
+    new_pub_key
+  )
+
+  (include "condition_codes.clib")
+  (include "curry_and_treehash.clib")
+ 
+  (defun sha256tree1 (TREE)
+      (if (l TREE)
+          (sha256 2 (sha256tree1 (f TREE)) (sha256tree1 (r TREE)))
+          (sha256 1 TREE)
+      )
+  )  
+
+  (defun new-puzzle-hash (MOD_HASH mod_hash_hash new_data new_version pub_key)
+    (puzzle-hash-of-curried-function
+    MOD_HASH
+    pub_key new_version new_data mod_hash_hash ; parameters must be passed in reverse order
+    )
+  )
+
+  (defun remove-in-list-by-index (data index_to_remove curr_index)
+      (if (l data)
+        (if (= index_to_remove curr_index)
+          (r data)
+          (c (f data) (remove-in-list-by-index (r data) index_to_remove (+ curr_index 1)))
+        )
+        data
+      )
+  )
+  ; mutates DATA and returns mutated instance of it
+  ; can either add a pair or remove it at index point in the list
+  ; NOTE: new pairs are prepended not appended
+  (defun mutate-data (DATA commit) 
+    (if (= (f commit) +) 
+      (c (f (r commit)) DATA)
+      (if (= (f commit) -) 
+        (remove-in-list-by-index DATA (f (r commit)) 0)
+        (x (c "bad commit operator: " (f commit)))
+      )
+    )       
+  )
+
+  ; main
+ (if new_pub_key
+    ; change ownership
+    (if (l DATA)
+      (list
+          (list AGG_SIG_ME PUB_KEY (sha256tree1 new_pub_key))
+          (list CREATE_COIN (new-puzzle-hash MOD_HASH (sha256tree1 MOD_HASH) (sha256tree1 DATA) (sha256tree1 VERSION) (sha256tree1 new_pub_key)) 1)
+      )
+      (x "no init")
+    )
+    ; can only be mutated if version > 0 
+    (if (> VERSION 0)
+        (if (= new_version (+ VERSION 1))
+            (list
+                (list AGG_SIG_ME PUB_KEY (sha256tree1 commit))
+                (list CREATE_COIN (new-puzzle-hash MOD_HASH (sha256tree1 MOD_HASH) (sha256tree1 (mutate-data DATA commit)) (sha256tree1 new_version) (sha256tree1 PUB_KEY)) 1)
+            )
+            (if (= 0 new_version)
+              ; if version==0 we make the coin immutable, as we require version > 0 to be mutable
+              ; use version==0 to display latest DATA of immutable coin 
+              (list 
+                (list AGG_SIG_ME PUB_KEY (sha256tree1 new_version))
+                (list CREATE_COIN (new-puzzle-hash MOD_HASH (sha256tree1 MOD_HASH) (sha256tree1 DATA) (sha256tree1 new_version) (sha256tree1 PUB_KEY)) 1)
+              )
+              (x "version mismatch")
+            )
+        )
+        (x "immutable coin")
+    )
+  )
+)
