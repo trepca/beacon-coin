@@ -10,9 +10,9 @@ You might want to use it for coordinating peers in a network, storing DNS inform
 I wrote this mainly to learn more about Chialisp and explore smart coins in Chia Network (especially singletons). 
 I used some general principles that could be expanded to implement a smart contract type of coin, with methods and state etc.
 
-This code is still work in progress so *please DO NOT USE it on mainnet*. Use at your own risk. 
+This code is still work in progress so **please DO NOT USE it on mainnet**. Use at your own risk. 
 
-**Please note that I'm not affiliated with Chia Network.**
+**Please note that I'm not affiliated with Chia Network.** This means that I don't know if this is the _right_ way to write smart coins and that it might contain some serious security issues until more people review it. Any feedback appreciated. Thanks! 
 
 # How to use
 
@@ -29,7 +29,13 @@ pip install .
 beacon-coin --help
 ```
 
-It should work on Windows too, but don't really have easy access to it to test. 
+It should work on Windows too, although did't test:
+```powershell
+py -m venv venv
+./venv/Scripts/activate
+pip install .
+beacon-coin
+```
 
 ## Usage
 
