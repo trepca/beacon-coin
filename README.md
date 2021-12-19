@@ -124,6 +124,9 @@ $ beacon-coin get-data 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f
 {"version": 4, "data": [[0, ["some", "data"]]]}
 ```
 
+# Python API 
+
+`beacon-coin` is internally using [python API](beacon_coin/wallet.py) to manage coins. 
 # TODOs
 - [ ] refactor wallet and make it more DRY 
 - [ ] publish tests (right now still in progress)
