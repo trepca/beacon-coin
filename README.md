@@ -64,31 +64,33 @@ First you'll need to mint a beacon coin:
 
 ```bash
 $ beacon-coin mint --fee=10 
-Minted a new beacon coin with id: 3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea82
+Minted a new beacon coin with id: 3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea12
 
-Track transaction: 070d0ed91de0ce80c884f13ecad4db02d9d63ae028244e1e55dc69aac1b7905f     Fee: 10 mojos
+Track transaction: 070d0ed91de0ce80c884f13ecad4db02d9d63ae028244e1e55dc69aac1b7904f     Fee: 10 mojos
 
 NOTE: Store launcher_id somewhere safe as this wallet doesn't keep it anywhere yet.
 ```
 
 Wait until transaction is processed.
 
+You can use `cdv mempool -txid 070d0ed91de0ce80c884f13ecad4db02d9d63ae028244e1e55dc69aac1b7904f`
+
 Let's check contents first:
 ```bash
-$ beacon-coin get-data 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea82
+$ beacon-coin get-data 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea12
 {"version": 1, "data": []}
 ```
 
 Ok, now let's add some data:
 ```bash
-$ beacon-coin add-pair --fee=10 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea82 "some" "data"
-Added pair ('some', 'data') using transaction: 364eeab9433f6bbf382f2659bdf5bc23c51ae862a765b3d3fdfcf56fe9c8bf8e
+$ beacon-coin add-pair --fee=10 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea12 "some" "data"
+Added pair ('some', 'data') using transaction: 364eeab9433f6bbf382f2659bdf5bc23c51ae862a765b3d3fdfcf56fe9c8bf1e
 ```
-Wait again for node to process it.  (`cdv mempool -txid 364eeab9433f6bbf382f2659bdf5bc23c51ae862a765b3d3fdfcf56fe9c8bf8e`)
+Wait again for node to process it.
 
 And let's check content again:
 ```bash
-$ beacon-coin get-data 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea82                       
+$ beacon-coin get-data 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea12                       
 {"version": 2, "data": [[0, ["some", "data"]]]}
 ```
 Ok, we just stored some data on Chia blockchain. 
@@ -96,21 +98,21 @@ Ok, we just stored some data on Chia blockchain.
 Let's add more and test the removal.
 
 ```bash
-$ beacon-coin add-pair --fee=10 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea82 "more" "data"
-Added pair ('more', 'data') using transaction: 4e1ed3b76c474a73d68781d328b130d408bacd6650b4018d63231581655aaca3
+$ beacon-coin add-pair --fee=10 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea12 "more" "data"
+Added pair ('more', 'data') using transaction: 4e1ed3b76c474a73d68781d328b130d408bacd6650b4018d63231581655aac33
 ```
 
 ```bash
-$ beacon-coin get-data 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea82                       
+$ beacon-coin get-data 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea12                       
 {"version": 3, "data": [[0, ["more", "data"]], [1, ["some", "data"]]]}
 ```
 ```bash
-$ beacon-coin remove-pair --fee=15 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea82 0
-Removed pair at 0 using transaction: efbbe9fbeadc78c0840f3bffbda57ea1f8d734cbb634992fcd5e4aa28c4a5aa1
+$ beacon-coin remove-pair --fee=15 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea12 0
+Removed pair at 0 using transaction: efbbe9fbeadc78c0840f3bffbda57ea1f8d734cbb634992fcd5e4aa28c4a5ab1
 ```
 
 ```bash
-$ beacon-coin get-data 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea82
+$ beacon-coin get-data 0x3085341ed92faeda6887f5270b7cc049c024bd2bf1c27a9e8f33e1f902fbea12
 {"version": 4, "data": [[0, ["some", "data"]]]}
 ```
 
