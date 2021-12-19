@@ -8,3 +8,5 @@ dist
 main.sym
 .DS_Store
 .python-version
+/build
+/tests

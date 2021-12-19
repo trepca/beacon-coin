@@ -5,7 +5,7 @@ from chia.util.byte_types import hexstr_to_bytes
 import json
 import click
 
-from beacon.wallet import BeaconWallet
+from beacon_coin.wallet import BeaconWallet
 
 VERBOSE = False
 
@@ -43,12 +43,23 @@ def parse_launcher(ctx, param, value):
         raise click.BadArgumentUsage("Not a valid launcher ID")
 
 
-@click.group()
-@click.option("--config-path", default=None)
-@click.option("--fingerprint", default=None)
-@click.option("-v", "--verbose", is_flag=True)
+@click.group(name="beacon-coin")
+@click.option(
+    "--config-path",
+    help="Path to your Chia blockchain config (usually ~/.chia). Defaults to fetching it from CHIA_ROOT env var.",
+    default=None,
+)
+@click.option(
+    "--fingerprint",
+    help="Key fingerprint, will default to first one it finds if not provided.",
+    default=None,
+)
+@click.option("-v", "--verbose", help="Show more debugging info.", is_flag=True)
 @click.pass_context
 def cli(ctx, config_path, fingerprint, verbose):
+    """Manage beacon coins on Chia network.
+
+    They can be used to store key information in a decentralized and durable way."""
     if verbose:
         global VERBOSE
         VERBOSE = True
@@ -83,7 +94,10 @@ async def mint(ctx, fee):
             click.echo("Failed to mint for unknown reason.")
 
 
-@click.command(name="add-pair")
+@click.command(
+    name="add-pair",
+    help="Add a pair of strings to coin data.\n\nPair will be prepended to the list, not appended. Only works on mutable coins.",
+)
 @click.option(
     "--fee",
     type=int,
@@ -105,7 +119,10 @@ async def add_pair(ctx, launcher_id, key, value, fee):
         click.echo(f"Added pair ('{key}', '{value}') using transaction: {tx_id}")
 
 
-@click.command(name="remove-pair")
+@click.command(
+    name="remove-pair",
+    help="Remove a pair at a specifed index from coin data.\n\nOnly works on mutable coins.",
+)
 @click.option(
     "--fee",
     type=int,
@@ -124,7 +141,7 @@ async def remove_pair_at(ctx, launcher_id, index: int, fee: int):
         click.echo(f"Removed pair at {index} using transaction: {tx_id}")
 
 
-@click.command(name="freeze")
+@click.command(name="freeze", help="Freezing makes the coin immutable")
 @click.option(
     "--fee",
     type=int,
@@ -142,7 +159,9 @@ async def freeze(ctx, launcher_id, fee):
         click.echo(f"Beacon coin frozen using transaction: {tx_id}")
 
 
-@click.command(name="change-owner")
+@click.command(
+    name="change-owner", help="Change the owner, works on mutable and immutable coins."
+)
 @click.option(
     "--fee",
     type=int,
@@ -166,6 +185,9 @@ async def change_owner(ctx, launcher_id, new_pub_key, fee):
 @coro
 @click.pass_context
 async def get_data(ctx, launcher_id):
+    """Returns a JSON of coin data and metadata
+
+    Can be piped into other commands."""
     wallet: BeaconWallet
     async with ctx.obj as wallet:
         debug(f"Fetching data for beacon coin: {launcher_id.hex()}")

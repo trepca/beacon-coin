@@ -5,8 +5,8 @@ from typing import Dict, List, Optional, Tuple
 
 import aiohttp
 
-from beacon import driver
-from beacon.driver import get_inner_puzzle_reveal, solution_for_beacon
+from beacon_coin import driver
+from beacon_coin.driver import get_inner_puzzle_reveal, solution_for_beacon
 from blspy import AugSchemeMPL, G2Element, PrivateKey
 from chia.consensus.coinbase import create_puzzlehash_for_pk
 from chia.consensus.default_constants import DEFAULT_CONSTANTS
