@@ -16,7 +16,6 @@ This code is still work in progress so **please DO NOT USE it on mainnet**. Use 
 
 # How to use
 
-You'll need a testnet chia node and wallet with some mojos. Once wallet and node are synced, install the repo.
 
 ## For Unix/Macs
 
@@ -36,6 +35,9 @@ py -m venv venv
 pip install .
 beacon-coin
 ```
+
+You'll need a **testnet chia node and wallet with some mojos**. Once wallet and node are synced, you can start using beacon coin.
+Make sure `CHIA_ROOT` is set and pointing to the correct chia network (testnet!). More on that here: https://github.com/Chia-Network/chia-blockchain/wiki/How-to-connect-to-the-Testnet 
 
 ## Usage
 
