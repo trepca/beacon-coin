@@ -14,8 +14,8 @@ clibs_path: Path = Path(std_lib.__file__).parent
 SINGLETON_MOD = load_chia_clvm("singleton_top_layer.clvm")
 LAUNCHER_PUZZLE = load_chia_clvm("singleton_launcher.clvm")
 SINGLETON_LAUNCHER_HASH = LAUNCHER_PUZZLE.get_tree_hash()
-RECORD_MOD: Program = load_clvm(
-    "beacon_puzzle.clsp", "beacon.clsp", search_paths=[clibs_path]
+BEACON_MOD: Program = load_clvm(
+    "beacon_puzzle.clsp", "beacon_coin.clsp", search_paths=[clibs_path]
 )
 
 SINGLETON_MOD_HASH = SINGLETON_MOD.get_tree_hash()
@@ -30,7 +30,7 @@ def singleton_puzzle(
     )
 
 
-def create_beacon_puzzle(data, pub_key, version=1, mod=RECORD_MOD) -> Program:
+def create_beacon_puzzle(data, pub_key, version=1, mod=BEACON_MOD) -> Program:
     return mod.curry(mod.get_tree_hash(), data, version, pub_key)
 
 
