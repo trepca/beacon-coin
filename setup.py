@@ -6,10 +6,14 @@ with open("README.md", "rt") as fh:
     long_description = fh.read()
 
 dependencies = [
-    "chia-blockchain",
+    "chia-dev-tools",
 ]
 
-dev_dependencies = ["flake8", "mypy", "black", "chia-dev-tools"]
+dev_dependencies = [
+    "flake8",
+    "mypy",
+    "black",
+]
 
 setup(
     name="beacon_coin",
